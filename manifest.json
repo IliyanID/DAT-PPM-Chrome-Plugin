@@ -1,0 +1,6 @@
+{
+  "name": "DAT Price Per Mile",
+  "description": "DAT plugin to sort freight by price per mile",
+  "version": "1.0",
+  "manifest_version": 3
+}
