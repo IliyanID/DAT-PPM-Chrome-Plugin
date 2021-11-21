@@ -3,11 +3,16 @@
   "description": "DAT plugin to sort freight by price per mile",
   "version": "1.0",
   "manifest_version": 3,
-  "background": {
-    "service_worker": "background.js"
-  },
   "action": {
-    "default_popup": "inject.html"
+    "default_popup": "header.html"
   },
-  "permissions": ["activeTab", "scripting"]
+  "permissions": ["activeTab", "scripting"],
+  "content_scripts": [
+    {  
+        "matches": ["<all_urls>"],
+        "js": ["contentScript.js"],
+        "css": ["contentScript.css"],
+        "run_at": "document_end"
+    }
+  ]
 }
