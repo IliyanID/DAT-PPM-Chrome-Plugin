@@ -1,18 +1,36 @@
 {
-  "name": "DAT Price Per Mile",
-  "description": "DAT plugin to sort freight by price per mile",
-  "version": "1.0",
-  "manifest_version": 3,
-  "action": {
-    "default_popup": "header.html"
-  },
-  "permissions": ["activeTab", "scripting"],
-  "content_scripts": [
-    {  
-        "matches": ["https://power.dat.com/search/loads"],
-        "js": ["contentScript.js"],
-        "css": ["contentScript.css"],
-        "run_at": "document_start"
-    }
-  ]
+    "name": "DAT Price Per Mile",
+    "description": "DAT plugin to sort freight by price per mile",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": 
+        {
+            "default_popup": "header.html"
+        },
+    "permissions": ["activeTab", "scripting","cookies"],
+    "content_scripts": 
+        [
+            {  
+                "matches": ["https://power.dat.com/search/loads"],
+                "js": ["contentScript.js"],
+                "css": ["contentScript.css"],
+                "run_at": "document_start"
+            }
+        ],
+    "web_accessible_resources": 
+        [
+            {
+                "resources": ["Auth_Cookies.js"],
+                "matches": ["<all_urls>"]
+            }
+        ],
+    "background": 
+        {
+        "service_worker": "background.js"
+        },
+    "host_permissions": 
+        [
+            "*://*.power.dat.com",
+            "*://*/*"
+        ]
 }
