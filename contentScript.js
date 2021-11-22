@@ -406,17 +406,17 @@ const addPPM = () =>{
     let tableRows = document.getElementsByClassName('qa-match-row')
     for(let i = 0; i < tableRows.length;i++){
         let tableRow = tableRows[i];
-        let distance = tableRow.getElementsByClassName('trackLink')[0].innerHTML
+        let distance = tableRow.getElementsByClassName('trackLink')[0].innerHTML.replace(/\D/g, '')
 
         let rate = tableRow.getElementsByClassName('rate')[0].innerHTML
 
 
 
         let PPM = 0
-        if(parseInt(rate) && parseInt(distance) && rate !== '—' && distance !== '—'){
-            let newdistance = parseInt(distance.replace(/\D/g, ''))
+        if(rate && distance && rate !== '—' && distance !== '—'){
+            distance = parseInt(distance)
             rate = parseInt(rate.replace(',','').substring(1))
-            PPM = (rate/newdistance).toFixed(2);
+            PPM = (rate/distance).toFixed(2);
         }
         
         //console.log(`PPM : ${PPM} | rate : ${rate} | distance : ${distance}`)
