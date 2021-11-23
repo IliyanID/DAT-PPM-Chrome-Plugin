@@ -23,42 +23,12 @@ function sleep(ms) {
 
 let autoSort = false
 
-const sortByPPM = () =>{
-    let tableRows = document.getElementsByClassName('resultItem')
-
-    const sorter = ((a,b) =>{
-        let aPPM,bPPM
-        try{aPPM = parseFloat(a.getElementsByClassName('rate')[1].innerHTML)}
-        catch(e){aPPM = 0}
-
-        try{bPPM = parseFloat(b.getElementsByClassName('rate')[1].innerHTML)}catch(e){bPPM = 0}
-
-        
-
-        if(aPPM < bPPM)return 1
-        if(aPPM > bPPM) return -1
-        return 0
-    })
-
-    let originalRows = Array.from(tableRows);
-
-    let sorted = originalRows.sort(sorter);
-
-    let tableResults = document.getElementsByClassName('searchResultsTable')[0]
-    while(tableResults.children.length > 1){
-        tableResults.removeChild(tableResults.children[1])
-    }
-    
-    sorted.forEach(e => document.getElementsByClassName("searchResultsTable")[0].appendChild(e));
-
-}
-
 const addTableHeaders = () =>{
     const item = 
     `<th style="cursor:pointer" class="bookItNow ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope" sortable="BookItNow" ng-model="ctrl.currentSort" desc-first="true" ng-if="isLoadSearch()" id="PPM">
         <a style="cursor:pointer" class="sortField ">
             <ng-transclude>
-                <span style="cursor:pointer" class="ng-scope">Price Per Mile</span>
+                <span style="cursor:pointer" class="ng-scope">PPM</span>
             </ng-transclude>
             <i class="sort"></i>
         </a>
@@ -68,6 +38,7 @@ const addTableHeaders = () =>{
 
 
     let table = document.getElementsByClassName('columnHeaders')[0]
+    table.children[table.children.length-1].remove()
     table.appendChild(injectElement)
 
     document.addEventListener('click',async (e)=>{
@@ -77,7 +48,7 @@ const addTableHeaders = () =>{
             autoSort = false;
             await sleep(1000)
         }
-        else if(headerName === 'Price Per Mile'){
+        else if(headerName === 'PPM'){
             autoSort = true;
             clearInterval(intervalId)
             await sendApiCall()
@@ -128,15 +99,17 @@ const updateAllRows = async () =>{
     let templateRow = document.getElementsByClassName('resultItem')[0].cloneNode(true);
 
     let tableResults = document.getElementsByClassName('searchResultsTable')[0]
-    while(tableResults.children.length > 1){
-        tableResults.removeChild(tableResults.children[1])
-    }
+    while(tableResults.children.length > 2)
+        tableResults.children[1].remove();
+    //let firstChild = tableResults.children[0]
+    //tableResults.innerHTML =  `<thread class="thread">${firstChild.innerHTML}</thread>`;
 
     
     
 
-    loads.forEach(async load=>{
-
+    loads.forEach(async (load,index)=>{
+        if(index >= 150)
+            return
     //console.log(`PPM: ${calculatePPM(load)} | rate : ${load.rate} | distance : ${load.tripMiles}`)
 
     const getRowHTML = async(hide,id) =>{
@@ -163,13 +136,12 @@ const updateAllRows = async () =>{
 
             response = await response.json();
             defaultInfo = {...response}
-            
         }
 
         let element = 
         `
         
-            <tr id="${load.id}" class="qa-match-row resultSummary unread">
+        <tr id="${load.id}" class="qa-match-row resultSummary unread">
 	            <td class="activity" rowspan="4"> <!-- rowspan is for groups formatting when expanded -->
 		            <!-- rowspan is for groups formatting when expanded -->
 		            <mark></mark>
@@ -250,9 +222,8 @@ const updateAllRows = async () =>{
 
 	        <td class="rate">${load.rate}</td>
 
-	        <td class="bookItNow">${load.bookItNowFormatted}</td>
 
-            <td class="rate">${load.PPM}</td>
+            <td class="rate">$${load.PPM}</td>
         </tr>
 <tr class="groupData ng-scope ${hideClass}">
 	<td colspan="20">
@@ -285,38 +256,55 @@ const updateAllRows = async () =>{
 </tr>
 
 <tr class="resultDetails  ng-scope ${hideClass}">
-	<td colspan="20">
-		<!---->
-		<!-- colspan not the same as summary row due to rowspan in groups -->
-		<dl>
-			<dt>Ref:</dt>
-			<dd class="refId"></dd>
+    <td colspan="20">
+        <!---->
+        <!-- colspan not the same as summary row due to rowspan in groups -->
+        <dl>
+            <dt>Ref:</dt>
+            <dd class="refId">${defaultInfo.referenceId}</dd>
 
-			
-			<dt>Commodity:</dt>
-			<dd class="commodity" title="${defaultInfo.commodity}">${defaultInfo.commodity}</dd>
-			
-		</dl>
+    
+            <dt>Commodity:</dt>
+            <dd class="commodity" title="${defaultInfo.commodity}">${defaultInfo.commodity}</dd>
+    
+        </dl>
 
-		<dl>
-			<dt>Comments 1:</dt>
-			<dd class="comments1" title="${defaultInfo.comment1}">${defaultInfo.comment1},</dd>
+        <dl>
+            <dt>Comments 1:</dt>
+            <dd class="comments1" title="${defaultInfo.comment1}">${defaultInfo.comment1}</dd>
 
-			<dt>Comments 2:</dt>
-			<dd class="comments2" title="${defaultInfo.comment2}">${defaultInfo.comment2}</dd>
+            <dt>Comments 2:</dt>
+            <dd class="comments2" title="${defaultInfo.comment2}">${defaultInfo.comment2}</dd>
+        </dl>
 
-			
-			<dt>Dock Hours:</dt>
-			<dd class="dock-hours" title="${defaultInfo.dockHours}">${defaultInfo.dockHours}</dd>
-			
 
-			
-			<dt>Pickup Hours:</dt>
-			<dd class="pickup-hours" title="${defaultInfo.pickupHours}">${defaultInfo.pickupHours}</dd>
-			
-		</dl>
-	</td>
+        <dl>
+            <dt class="">Docket:</dt>
+                <dd class="docket ">
+        
+                    <a href="urls?Category=CustomerDirectoryTCSIProfile&amp;MatchId=DS2byLDs&amp;RegistryId=S.157791.283877" 
+                    class="trackLink" track-link-category="Company" target="_blank"
+                    >
+                        ${defaultInfo.docketNumber}
+                    </a>
+        
+                </dd>
+
+    
+                <dd class="bonding">
+                    <span class="is-tia-member" title="TIA Member"></span>    
+                    <span class="is-assurable" title="Assure It">
+                        <a href="urls?Category=Assurance&amp;MatchId=DS2byLDs&amp;RegistryId=S.157791.283877" 
+                            class="trackLink" 
+                            track-link-category="Assurable" 
+                            target="_blank"
+                            ></a>
+                    </span>
+                </dd>
+        </dl>
+    </td>
 </tr>
+
 <tr class="actions ng-scope ${hideClass}">
     <td colspan="20">
         <a class="print" title="Print"></a>
@@ -348,58 +336,47 @@ const sendApiCall = async() =>{
         loads = loads.concat(response.exact)
         loads = loads.concat(response.similar)
     }
-    let response = await fetch(`https://power.dat.com/search/matches/sort/?direction=asc&field=DestinationDeadhead&searchId=${searchId}&updateSortParams=false`, {
-  "headers": {
-    "accept": "application/json, text/plain, */*",
-    "accept-language": "en-US,en;q=0.9,bg-BG;q=0.8,bg;q=0.7",
-    "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"Windows\"",
-    "sec-fetch-dest": "empty",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "same-origin",
-    "x-requested-with": "XMLHttpRequest"
-  },
-  "referrer": "https://power.dat.com/search/loads",
-  "referrerPolicy": "strict-origin-when-cross-origin",
-  "body": null,
-  "method": "GET",
-  "mode": "cors",
-  "credentials": "include"
-})
-await parseResponse(await response.json())
-
-while (true){
-    response = await fetch(`https://power.dat.com/search/matches/next/${searchId}?pageSize=1000`, {
-    "headers": {
-        "x-requested-with": "XMLHttpRequest"
-    },
-    "referrer": "https://power.dat.com/search/loads",
-    "body": null,
-    "method": "GET",
-    "credentials": "include"
+    let response = await fetch(`https://power.dat.com/search/matches/sort/?direction=desc&field=Rate&searchId=${searchId}&updateSortParams=true`, {
+        "headers": {
+            "x-requested-with": "XMLHttpRequest"
+        },
+        "body": null,
+        "method": "GET",
+        "credentials": "include"
     })
-    response = await response.json();
+    response.json().then(parsedJson =>parseResponse(parsedJson))
 
-    await parseResponse(response)
-    if(response.noMoreMatches || (response.exact.length === 0 && response.similar.length === 0)){
-        loads = loads.filter(el=>el!== undefined)
-        break;
-        }
-    }
-
+    await fetch(`https://power.dat.com/search/matches/next/${searchId}?pageSize=1000`, {
+        "headers": {
+            "x-requested-with": "XMLHttpRequest"
+        },
+        "body": null,
+        "method": "GET",
+        "credentials": "include"
+    }).then(response=>response.json().then(parsedJson=>{
+                parseResponse(parsedJson)
+                loads = loads.filter(el=>el!== undefined)
+            }
+        ))
+    
 }
 
 const resetRowPPM = () =>{
-    try{
     let tableRows = document.getElementsByClassName('qa-match-row')
     for(let i = 0; i < tableRows.length;i++){
         let tableRow = tableRows[i];
-
+        try{
+        tableRow.getElementsByClassName('bookItNow')[0].remove()
+        }catch(e){}
+        try{
         let rate = tableRow.getElementsByClassName('rate')
         rate[1].remove()
+        }catch(e){}
+
+
+        
     }
-    }catch(e){}
+
 }
 
 const addPPM = () =>{
@@ -424,7 +401,7 @@ const addPPM = () =>{
         
         let addedColumn =htmlToElement( 
         `
-            <td class='rate'>${PPM}</td>
+            <td class='rate'>$${PPM}</td>
         `)
         tableRow.appendChild(addedColumn)
     }
@@ -456,9 +433,6 @@ const init = async () =>{
 
     resetRowPPM();
     addPPM();
-
-    if(autoSort)
-        sortByPPM();
 
     }catch(e){console.error(e);}   
 }

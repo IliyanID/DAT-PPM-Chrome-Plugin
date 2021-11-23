@@ -1,32 +1,24 @@
 {
     "name": "DAT Price Per Mile",
     "description": "DAT plugin to sort freight by price per mile",
-    "version": "1.0",
+    "version": "1.5",
     "manifest_version": 3,
     "action": 
         {
-            "default_popup": "header.html"
+            "default_popup": "plugin-container/header.html"
         },
-    "permissions": ["activeTab", "scripting","cookies"],
+    "permissions": ["scripting","storage"],
     "content_scripts": 
         [
             {  
                 "matches": ["https://power.dat.com/search/loads"],
-                "js": ["contentScript.js"],
-                "css": ["contentScript.css"],
-                "run_at": "document_start"
-            }
-        ],
-    "web_accessible_resources": 
-        [
-            {
-                "resources": ["Auth_Cookies.js"],
-                "matches": ["<all_urls>"]
+                "js": ["content_script/Main_Content_Script.js"],
+                "run_at": "document_end"
             }
         ],
     "background": 
         {
-        "service_worker": "background.js"
+        "service_worker": "background-runners/background.js"
         },
     "host_permissions": 
         [
