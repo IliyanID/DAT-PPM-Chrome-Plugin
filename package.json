@@ -1,0 +1,27 @@
+{
+  "name": "dat-ppm-chromeplugin",
+  "version": "1.0.0",
+  "description": "Welcome",
+  "main": "content_script/main.js",
+  "scripts": {
+    "start": "webpack --watch --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IliyanID/DAT-PPM-Chrome-Plugin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IliyanID/DAT-PPM-Chrome-Plugin/issues"
+  },
+  "homepage": "https://github.com/IliyanID/DAT-PPM-Chrome-Plugin#readme",
+  "dependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.64.3",
+    "webpack-cli": "^4.9.1"
+  }
+}
