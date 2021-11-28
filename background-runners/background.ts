@@ -1,5 +1,5 @@
 
-function getCookies (domain, name) {
+function getCookies (domain:string, name:string) {
     return new Promise(resolve => {
         chrome.cookies.get({"url": domain, "name": name}, function(cookie) {
             resolve(cookie.value)
@@ -8,7 +8,7 @@ function getCookies (domain, name) {
     
 }
 
-const  wrapper = async (cookie) =>{
+const  wrapper = async (cookie:string) =>{
     return await getCookies('https://power.dat.com',cookie)
 }
 

@@ -14,6 +14,8 @@
         "./content_script/API.ts",
         "./content_script/main.ts",
         "./content_script/RowHeader.ts",
-        "./content_script/utils.ts"
+        "./content_script/utils.ts",
+        "./background-runners/background.ts",
+        "./plugin-container/popup.ts"
     ]
   }
