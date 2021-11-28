@@ -17,10 +17,18 @@ let minRate = 0;
 
 chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(msg) {
-        if(msg.minRate)
+        if(msg.minRate){
             minRate = msg.minRate
+            chrome.storage.local.set({minRate: msg.minRate}, function() {
+                //console.log('Value is set to ' + value);
+            });
+        }
         else
-            port.postMessage(minRate);
+        chrome.storage.local.get(['minRate'], function(result) {
+            console.log('Value currently is ' + result.key);
+            port.postMessage(result.minRate);
+
+          });
     });
 });
 
