@@ -1,17 +1,11 @@
+import type  { load } from './main'
 import API from './API'
 const api = new API()
 
-const checkReponseObject = (defaultInfo,responseObj) =>{
-    Object.keys(defaultInfo).forEach(key =>{
-        if(!responseObj[key])
-            responseObj[key] = ''
-    })
-}
-
-export const getRowHTML = async(load,hide) =>{
+export const getRowHTML = async(load:load,hide:boolean) =>{
     let hideClass = (hide)?' ng-hide':''
 
-    let defaultInfo = {
+    let defaultInfo:load = {
         commodity: "",
         comment1: "",
         comment2: "",

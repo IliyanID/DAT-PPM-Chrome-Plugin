@@ -12,11 +12,15 @@ const  wrapper = async (cookie) =>{
     return await getCookies('https://power.dat.com',cookie)
 }
 
+
+let minRate = 0;
+
 chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(msg) {
-        let response = {}
-        response[msg.cookie] = await wrapper(msg.cookie)
-        port.postMessage(response);
+        if(msg.minRate)
+            minRate = msg.minRate
+        else
+            port.postMessage(minRate);
     });
 });
 

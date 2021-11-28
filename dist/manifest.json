@@ -5,14 +5,14 @@
     "manifest_version": 3,
     "action": 
         {
-            "default_popup": "plugin-container/header.html"
+            "default_popup": "dist/index.html"
         },
     "permissions": ["scripting","storage"],
     "content_scripts": 
         [
             {  
                 "matches": ["https://power.dat.com/search/loads"],
-                "js": ["dist/main.js"],
+                "js": ["dist/content_script.js"],
                 "run_at": "document_end"
             }
         ],

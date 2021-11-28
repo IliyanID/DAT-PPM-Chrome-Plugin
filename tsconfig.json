@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "outDir": "./distTS/",
+      "noImplicitAny": true,
+      "module": "es6",
+      "target": "es6",
+      "allowJs": true,
+      "moduleResolution": "node",
+      "lib": [
+        "ES6","DOM"
+  ],
+    },
+    "files":[
+        "./content_script/API.ts",
+        "./content_script/main.ts",
+        "./content_script/RowHeader.ts",
+        "./content_script/utils.ts"
+    ]
+  }

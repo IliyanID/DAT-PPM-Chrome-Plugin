@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: {content_script:'./content_script/main.js' },
+  entry: {content_script:'./content_script/main.ts',popup:'./plugin-container/popup.ts' },
   module: {
     rules: [{ test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ }], // do not forget to change/install your own TS loader
   },
@@ -20,5 +20,5 @@ module.exports = {
       ],
     }),
   ],
-  output: { filename: 'main.js', path: path.resolve(__dirname, 'dist') }, // chrome will look for files under dist/* folder
+  output: {  filename: '[name].js', path: path.resolve(__dirname, 'dist') }, // chrome will look for files under dist/* folder
 };

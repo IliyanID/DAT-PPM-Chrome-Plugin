@@ -1,3 +1,8 @@
+import type { load } from './main'
+type response = {
+    similar:load[]
+    exact:load[]
+}
 export class API{
     getSearchId = () =>{
         let searchId = ''
@@ -11,8 +16,8 @@ export class API{
         return searchId
     }
 
-    makeApiCall = async (url) =>{
-        let response = await fetch(url, {
+    makeApiCall = async (url:string):Promise<any> =>{
+        let response:any = await fetch(url, {
             "headers": {
                 "x-requested-with": "XMLHttpRequest"
             },
@@ -24,10 +29,10 @@ export class API{
         return response
     }
 
-    getLoadInfo = async (matchId,defaultInfo) =>{
+    getLoadInfo = async (matchId:number,defaultInfo:load) =>{
         const searchId = this.getSearchId();
 
-        const checkReponseObject = (responseObj) =>{
+        const checkReponseObject = (responseObj:any) =>{
             Object.keys(defaultInfo).forEach(key =>{
                 if(!responseObj[key])
                     responseObj[key] = ''
@@ -35,15 +40,15 @@ export class API{
         }
 
         let url = `https://power.dat.com/search/matches/take/?matchId=${matchId}&searchId=${searchId}`
-        let response = await this.makeApiCall(url)
+        let response:load = await this.makeApiCall(url)
         checkReponseObject(response)
         return response
     }
 
     getAllLoads = async () =>{
         const searchId = this.getSearchId()
-        let allLoads = []
-        const concatLoads = (responseObj) =>{
+        let allLoads:load[] = []
+        const concatLoads = (responseObj:response) =>{
             if(responseObj.exact && responseObj.exact.length > 0)
                 allLoads = allLoads.concat(responseObj.exact)
             if(responseObj.similar && responseObj.similar.length > 0)
