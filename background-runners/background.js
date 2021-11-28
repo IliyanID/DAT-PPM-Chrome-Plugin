@@ -25,7 +25,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         }
         else
         chrome.storage.local.get(['minRate'], function(result) {
-            console.log('Value currently is ' + result.key);
+            console.log('Value currently is ' + result.minRate);
             port.postMessage(result.minRate);
 
           });

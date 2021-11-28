@@ -2,6 +2,7 @@ import { API } from './API'
 import { htmlToElement, sleep, waitToLoad } from './utils'
 import { getRowHTML} from './RowHeader'
 const api = new API();
+let port = chrome.runtime.connect();
 export type load = {
     commodity?:string,
     comment1?: string,
@@ -213,7 +214,6 @@ addTableHeaders()
 intervalId = window.setInterval(init,500)
 document.addEventListener('click',clickEventLisitioner)
 
-let port = chrome.runtime.connect();
 port.onMessage.addListener(function(msg) {
     minRate = msg
 });
