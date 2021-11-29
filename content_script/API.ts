@@ -1,7 +1,8 @@
 import type { load } from './main'
 type response = {
     similar:load[]
-    exact:load[]
+    exact:load[],
+    matchSet?:{similar:load[],exact:load[]}
 }
 export class API{
     getSearchId = () =>{
@@ -49,6 +50,8 @@ export class API{
         const searchId = this.getSearchId()
         let allLoads:load[] = []
         const concatLoads = (responseObj:response) =>{
+            if(responseObj.matchSet)
+            responseObj = responseObj.matchSet
             if(responseObj.exact && responseObj.exact.length > 0)
                 allLoads = allLoads.concat(responseObj.exact)
             if(responseObj.similar && responseObj.similar.length > 0)
