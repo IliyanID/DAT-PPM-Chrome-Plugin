@@ -75,6 +75,8 @@ const clickEventLisitioner = async (e:any) =>{
         allLoads = await api.getAllLoads()
         updateAllRows()
     }
+    else        
+        calculatePPM = true;
     
     lastScroll = -1
     intervalId = window.setInterval(init,500)   
