@@ -14,6 +14,11 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: true }),
     new HtmlWebpackPlugin({ template: 'plugin-container/header.html' }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "plugin-container/popup.css", to: "." },
+      ],
+    })
   ],
   output: {  filename: '[name].js', path: path.resolve(__dirname, 'public') }, // chrome will look for files under dist/* folder
 };

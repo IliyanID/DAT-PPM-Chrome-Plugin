@@ -14,21 +14,22 @@ const  wrapper = async (cookie:string) =>{
 
 
 let minRate = 0;
-
+let results = 150;
 chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(msg) {
-        if(msg.minRate){
+        if(msg.minRate !== undefined && msg.results !== undefined){
             minRate = msg.minRate
-            chrome.storage.local.set({minRate: msg.minRate}, function() {
+            results = msg.results
+            chrome.storage.local.set({settings: msg}, function() {
                 //console.log('Value is set to ' + value);
             });
         }
-        else
-        chrome.storage.local.get(['minRate'], function(result) {
-            console.log('Value currently is ' + result.minRate);
-            port.postMessage(result.minRate);
+        else{
+            chrome.storage.local.get(['settings'], function(result) {
+                port.postMessage(result.settings);
 
-          });
+            });
+        }
     });
 });
 

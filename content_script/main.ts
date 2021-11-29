@@ -36,10 +36,12 @@ let lastScroll =-1
 let calculatePPM = true
 const columnName = 'PPM'
 let minRate = 0;
+let maxResults = 150;
 
 
 
 const clickEventLisitioner = async (e:any) =>{
+    await waitToLoad('sortField')
     let headerContainer = document.getElementsByClassName('sortField')
     if(headerContainer[0] === undefined){
         console.error(`Failed to Find Header Container with className 'sortField'`)
@@ -66,6 +68,10 @@ const clickEventLisitioner = async (e:any) =>{
     
     else if(headerName === columnName){
         calculatePPM = false;
+        //Remove all pre-existing trips
+            let tableResults = document.getElementsByClassName('searchResultsTable')[0]
+            while(tableResults.children.length > 1)
+                tableResults.children[1].remove();
         allLoads = await api.getAllLoads()
         updateAllRows()
     }
@@ -127,17 +133,14 @@ const updateAllRows = async () =>{
         return 0
     })
 
-    //Remove all pre-existing trips
-    let tableResults = document.getElementsByClassName('searchResultsTable')[0]
-    while(tableResults.children.length > 2)
-        tableResults.children[1].remove();
 
     //Add sorted trips to list
     let listed = 0
     allLoads.forEach(async (load:load,index:number)=>{
-        if(listed > 250 || load.PPM === 0)
+        if(index+1 > maxResults || load.PPM === 0)
             return
         if(parseInt(load.rate.replace(',','').substring(1)) > minRate){
+            listed = listed + 1
             let hideExtraDetails = true
             let newLoadElement = htmlToElement(`<tbody class="resultItem exactMatch qa-scrollLock">${await getRowHTML(load,hideExtraDetails)}</tbody>`)
             document.getElementsByClassName("searchResultsTable")[0].appendChild(newLoadElement)
@@ -147,7 +150,7 @@ const updateAllRows = async () =>{
                 let newHTML = await getRowHTML(load,hideExtraDetails)
                 newLoadElement.innerHTML = newHTML
             })
-            listed++;
+            
         }
     })  
 }
@@ -194,6 +197,7 @@ const addPPM = async () =>{
 const init = async () =>{
     try{port.postMessage('')}catch(e){port = chrome.runtime.connect();}
 
+
     let scrollClassName = 'fixed-table-container-inner groupsClosed'
     await waitToLoad(scrollClassName)
     const ScrollElement = document.getElementsByClassName(scrollClassName)[0]
@@ -215,5 +219,10 @@ intervalId = window.setInterval(init,500)
 document.addEventListener('click',clickEventLisitioner)
 
 port.onMessage.addListener(function(msg) {
-    minRate = msg
+    if(minRate !== msg.minRate || maxResults !== msg.results){
+        minRate = msg.minRate
+        maxResults = msg.results
+        if(!calculatePPM)
+        clickEventLisitioner({path:[columnName]})
+    }
 });

@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="button.css">
+    <link rel="stylesheet" href="popup.css">
     <script src="popup.js"></script>
   </head>
-  <body>
-    <h2>Minimum Rate</h2>
-    <input id='input' type='number'/>
+  <h3>Settings</h3>
+    <small>
+      Reload PPM For Changes to Take Effect
+    </small>
+    <section>
+      <h2>
+        <div id='resultsValue'>250</div>
+        <div> Displayed Results</div>
+      </h2>
+      <input id='results' type='range' min='1' max='400'/>
+
+    </section>
+    <section>
+      <h2>Minimum Pay</h2>
+      <input id='rate' type='number'/>
+    </section>
+    <button id='save-settings'>Save Settings</button>
   </body>
 </html>

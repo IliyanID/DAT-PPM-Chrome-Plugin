@@ -1,0 +1,44 @@
+h3{
+    text-align: center;
+}
+
+h2,h2 >*{
+    display:inline-block;
+    font-size: 14px;
+}
+h2{
+    text-align: center;
+}
+
+section{
+    border-bottom: 2px solid black;
+}
+
+input{
+    margin:5px;
+    text-align: center;
+
+}
+    #results{
+        width:calc(100% - 10px);
+    }
+
+button{
+    margin:10px auto;
+    display:block;
+    padding:5px;
+    border-radius: 5px;
+    border:1px solid black;
+    background:none;
+    cursor: pointer;
+    transition: .25s;
+    width:100px;
+}
+    button:hover{
+        background-color:rgb(207, 207, 207);
+    }
+
+body{
+    background:none;
+}
+
