@@ -5,24 +5,23 @@
     "manifest_version": 3,
     "action": 
         {
-            "default_popup": "dist/index.html"
+            "default_popup": "public/index.html"
         },
     "permissions": ["scripting","storage"],
     "content_scripts": 
         [
             {  
                 "matches": ["https://power.dat.com/search/loads"],
-                "js": ["dist/content_script.js"],
+                "js": ["public/content_script.js"],
                 "run_at": "document_end"
             }
         ],
     "background": 
         {
-        "service_worker": "dist/background.js"
+        "service_worker": "public/background.js"
         },
     "host_permissions": 
         [
-            "*://*.power.dat.com",
             "*://*/*"
         ]
 }

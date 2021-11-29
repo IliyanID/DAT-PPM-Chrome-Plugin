@@ -192,7 +192,7 @@ const addPPM = async () =>{
 }
 
 const init = async () =>{
-    port.postMessage('');
+    try{port.postMessage('')}catch(e){port = chrome.runtime.connect();}
 
     let scrollClassName = 'fixed-table-container-inner groupsClosed'
     await waitToLoad(scrollClassName)
@@ -217,7 +217,3 @@ document.addEventListener('click',clickEventLisitioner)
 port.onMessage.addListener(function(msg) {
     minRate = msg
 });
-
-
-
-

@@ -12,13 +12,8 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
-    new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
+    new CleanWebpackPlugin({ cleanStaleWebpackAssets: true }),
     new HtmlWebpackPlugin({ template: 'plugin-container/header.html' }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'manifest.json' },
-      ],
-    }),
   ],
-  output: {  filename: '[name].js', path: path.resolve(__dirname, 'dist') }, // chrome will look for files under dist/* folder
+  output: {  filename: '[name].js', path: path.resolve(__dirname, 'public') }, // chrome will look for files under dist/* folder
 };
