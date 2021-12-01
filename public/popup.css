@@ -22,7 +22,9 @@ input{
     #results{
         width:calc(100% - 10px);
     }
-
+    small{
+        display: block!important;;
+    }
 button{
     margin:10px auto;
     display:block;
